@@ -1,7 +1,7 @@
 #  UnsafeECS Demo Boid
 
 #### **简介**
-UnsafeECS  一个基于c# 指针和结构体 的帧同步框架，
+UnsafeECS  一个基于c# 指针和结构体 的帧同步框架，使用于超大型场景的帧同步游戏
 优点：
 - 运行速度快，使用指针,和结构体，基本无gc , PureMode 都比Entitas 快两倍，Burst Mode，快四倍以上
 - 内存紧凑，预测回滚是否帧状态拷贝快 7000 只鱼的状态拷贝只消耗0.3ms
@@ -22,6 +22,9 @@ UnsafeECS  一个基于c# 指针和结构体 的帧同步框架，
 #### **场景图：** 
 <p align="center"> <img src="https://github.com/JiepengTan/JiepengTan.github.io/blob/master/assets/img/blog/UnsafeECS/Boidgif.gif?raw=true" width="512"/></p>
 
+
+
+#### **None：** 
 
  [1]: https://github.com/JiepengTan/LockstepEngine
  [2]: https://www.bilibili.com/video/av74152979?spm_id_from=333.171.b_686f6d655f636f6d6d656e745f6c697374.2
