@@ -9,7 +9,7 @@ QUICK START
 -------------------------------------------------------------
 USER SUPPORT
 -------------------------------------------------------------
-If you have some problem with the use of LockstepECS,
+If you have any problem with LockstepECS,
 you can send me a email
 2314215231@qq.com
 
