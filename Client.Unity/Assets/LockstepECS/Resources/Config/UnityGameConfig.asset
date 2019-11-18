@@ -1,0 +1,192 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 980ac168cef7441b18a297aac85d123e, type: 3}
+  m_Name: UnityGameConfig
+  m_EditorClassIdentifier: 
+  pureConfig:
+    RelPath: 
+    RecorderFilePath: 
+    DumpStrPath: 
+    InitScale: 1
+    MaxPlayerCount: 2
+    CollisionConfig:
+      scrollPos:
+        _x: 0
+        _y: 0
+      isShow: 0
+      collisionMatrix: 000000000000000000
+      pos:
+        _x: 0
+        _y: 0
+        _z: 0
+      worldSize:
+        _val: 60000000
+      minNodeSize:
+        _val: 1000000
+      loosenessval:
+        _val: 1250000
+      ColliderDataRelFilePath: 
+      percent:
+        _val: 100000
+      count: 100
+      showTreeId: 0
+    ClientModeInfo:
+      LocalId: 0
+      UserCount: 1
+      MapId: 0
+      RoomId: 0
+      Seed: 0
+      UserInfos:
+      - _Username: TestClient
+        _UserId: 0
+        _Datas: []
+      UdpEnd:
+        Ip: 
+        Port: 0
+      TcpEnd:
+        Ip: 
+        Port: 0
+      SimulationSpeed: 0
+    TargetInfos:
+    - MoveInfo:
+        InitPos:
+          _x: 15000000
+          _y: 28000000
+          _z: 160000000
+        Interval:
+          _val: 11000000
+        Radius:
+          _val: 50000000
+        InitDeg:
+          _val: 0
+      AssetId: 0
+    - MoveInfo:
+        InitPos:
+          _x: -15000000
+          _y: 28000000
+          _z: 164000000
+        Interval:
+          _val: 9000000
+        Radius:
+          _val: 50000000
+        InitDeg:
+          _val: 90000000
+      AssetId: 5
+    SpawnInfos:
+    - Count: 1000
+      Radius:
+        _val: 25000000
+      Position:
+        _x: -75000000
+        _y: 26799999
+        _z: 160100006
+      AssetId: 1
+    - Count: 1000
+      Radius:
+        _val: 25000000
+      Position:
+        _x: 75000000
+        _y: 26799999
+        _z: 160100006
+      AssetId: 2
+    ObstacleInfos:
+    - Position:
+        _x: -6000000
+        _y: 19000000
+        _z: 58000000
+      Forward:
+        _x: 0
+        _y: 0
+        _z: 1000000
+      Scale:
+        _val: 3000000
+      Deg:
+        _val: 0
+      AssetId: 3
+      SkillData:
+        IsNeedFire: 0
+        IsFiring: 0
+        CD:
+          _val: 4000000
+        CdTimer:
+          _val: 0
+        Duration:
+          _val: 1500000
+        DurationTimer:
+          _val: 0
+        AtkRange:
+          _val: 8000000
+      MoveData:
+        MoveSpd:
+          _val: 25000000
+        AcceleratedSpd:
+          _val: 50000000
+        CurSpd:
+          _val: 0
+        AngularSpd:
+          _val: 60000000
+        DeltaDeg:
+          _val: 0
+    - Position:
+        _x: 6000000
+        _y: 19000000
+        _z: 58000000
+      Forward:
+        _x: 0
+        _y: 0
+        _z: 1000000
+      Scale:
+        _val: 3000000
+      Deg:
+        _val: 0
+      AssetId: 3
+      SkillData:
+        IsNeedFire: 0
+        IsFiring: 0
+        CD:
+          _val: 4000000
+        CdTimer:
+          _val: 0
+        Duration:
+          _val: 1500000
+        DurationTimer:
+          _val: 0
+        AtkRange:
+          _val: 8000000
+      MoveData:
+        MoveSpd:
+          _val: 25000000
+        AcceleratedSpd:
+          _val: 50000000
+        CurSpd:
+          _val: 0
+        AngularSpd:
+          _val: 60000000
+        DeltaDeg:
+          _val: 0
+    BoidSettting:
+      CellRadius:
+        _val: 8000000
+      SeparationWeight:
+        _val: 1000000
+      AlignmentWeight:
+        _val: 1000000
+      TargetWeight:
+        _val: 2000000
+      ObstacleAversionDistance:
+        _val: 30000000
+      MoveSpeed:
+        _val: 25000000
+      SinkTime:
+        _val: 2000000
+      SinkSpd:
+        _val: -5000000
