@@ -1,13 +1,13 @@
-# Readme: UnsafeECS Demo Boid  当前版本是免费版本（含工具）
+# Readme: LockstepECS Demo Boid  当前版本是免费版本（含工具）
 ## **简介**
-UnsafeECS  一个基于c# 指针和结构体 的帧同步框架，使用于超大型场景的帧同步游戏
+LockstepECS  一个基于c# 指针和结构体 的帧同步框架，使用于超大型场景的帧同步游戏
 优点：
 - 运行速度快，使用指针,和结构体，基本无gc , PureMode 都比Entitas 快两倍，Burst Mode，快四倍以上
 - 内存紧凑，预测回滚是否帧状态拷贝快 7000 只鱼的状态拷贝只消耗0.3ms
 - API 和 UNITY ECS 非常相似，可以使用同一种编程范式来编写 logic 层 和 view 层
 - 无缝兼容UnityECS ，使用条件宏可以切换两种模式，
-	- PureMode:纯代码形式，可以直接在服务器中运行逻辑，不依赖Unity 
-	- Burst Mode: 模式，直接生成适配Unity ECS Burst+job框架代码的代码，进一步提升运行速度
+    - PureMode:纯代码形式，可以直接在服务器中运行逻辑，不依赖Unity 
+    - Burst Mode: 模式，直接生成适配Unity ECS Burst+job框架代码的代码，进一步提升运行速度
 
 
 
@@ -440,10 +440,10 @@ If macro UNING_UNITY_BURST_JOB was defined
 
 ```
     public class OnSkillFire: IEvent{
-   	   	public SkillData SkillData;
+        public SkillData SkillData;
     }
-  	public class OnSkillDone: IEvent{
-   	   	public SkillData SkillData;
+    public class OnSkillDone: IEvent{
+        public SkillData SkillData;
     }
 ```
 框架会自动生成相关的Service  
