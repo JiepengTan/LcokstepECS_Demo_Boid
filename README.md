@@ -24,15 +24,15 @@ UnsafeECS  一个基于c# 指针和结构体 的帧同步框架，使用于超�
   Space  释放技能 
 
 ### **2.联网模式**
-- 1.拷贝Assets/LockstepECS/DataAndTools.zip 到Assets/../DataAndTools.zip 
+- 1.拷贝Assets/LockstepECS/DataAndTools.zip 到Assets/../DataAndTools.zip (开源版的不需要这步)
 ![Screen Shot 2019-11-13 at 4.52.02 PM.png](https://upload-images.jianshu.io/upload_images/11593954-557b9e55517c2209.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 ![Screen Shot 2019-11-13 at 4.52.35 PM.png](https://upload-images.jianshu.io/upload_images/11593954-e7bfe217f459cf3d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-- 2. 解压
+- 2. 解压 (开源版的不需要这步)
 ![Screen Shot 2019-11-13 at 4.54.05 PM.png](https://upload-images.jianshu.io/upload_images/11593954-5bff88745d4fa63a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-- 3.打开Game.sln
+- 3.打开Game.sln 
 ![Screen Shot 2019-11-13 at 4.59.36 PM.png](https://upload-images.jianshu.io/upload_images/11593954-b4990f7daa51223e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 - 4.编译并运行 Game.sln
