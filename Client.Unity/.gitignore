@@ -15,6 +15,7 @@ Assets/AssetStoreTools*
 [Aa]ssets/Plugins/Game/
 [Aa]ssets/Plugins/Entitas/
 [Aa]ssets/Plugins/LockstepEngine/
+Packages/SharpZipLib.1.2.0/
 .idea/
 #不要重复提交相同的Dlls
 # Visual Studio cache directory
