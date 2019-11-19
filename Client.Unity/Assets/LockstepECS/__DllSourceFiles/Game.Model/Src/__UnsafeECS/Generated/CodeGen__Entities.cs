@@ -26,149 +26,88 @@ using Lockstep.Util;
 namespace Lockstep.UnsafeECS.Game {  
 
     [StructLayout(LayoutKind.Sequential, Pack = Define.PackSize)]
-    public unsafe partial class __entities {
+    public unsafe partial class _EntityManager :InternalBaseEntityManager{
 
-        internal unsafe NativeArray<T> GetAllEntityFiledAry<T,TEntity>(NativeEntityArray<TEntity> entityAry,int offset)
-            where T: unmanaged
-            where TEntity : unmanaged, IEntity
-        {
-            var entityCount = entityAry.CurEntityCount;
-            var retAry = new NativeArray<T>(entityCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            int curCopyedCount = 0;
-            if (entityCount > 0) {
-                var dstPtr = retAry.GetPointer(0);
-                var len = entityAry.Length;
-                var srcPtr = entityAry._EntityAry.GetPointer(0);
-                for(int i =0;i < len; ++i,++srcPtr){
-                    if(((Entity*) srcPtr)->_active){
-                        #if DEBUG
-                        if(++curCopyedCount > entityCount){
-                            throw new Exception("FrameWork error! CurEntityCount !=  active Entity count");
-                        }
-                        #endif
-                        *dstPtr = *((T*)((byte*)(srcPtr) + offset));
-                        ++dstPtr;
-                    }
-                }
-            }
-            return retAry;
-        }
-        internal unsafe NativeArray<T> GetAllEntityFiledAry<T,TEntity>(
-            NativeEntityArray<TEntity> entityAry,
-            int offset,
-            FuncEntityFilter<Entity> filterFunc,
-            out int curCopyedCount
-            )
-            where T: unmanaged
-            where TEntity : unmanaged, IEntity
-        {
-            var entityCount = entityAry.CurEntityCount;
-            var retAry = new NativeArray<T>(entityCount, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
-            curCopyedCount = 0;
-            if (entityCount > 0) {
-                var dstPtr = retAry.GetPointer(0);
-                var len = entityAry.Length;
-                var srcPtr = entityAry._EntityAry.GetPointer(0);
-                for(int i =0;i < len; ++i,++srcPtr){
-                    var ePtr = (Entity*) srcPtr;
-                    if(ePtr->_active) {
-                        if (filterFunc(ePtr)) {
-                            ++curCopyedCount;
-#if DEBUG
-                            if(curCopyedCount > entityCount){
-                                throw new Exception("FrameWork error! CurEntityCount !=  active Entity count");
-                            }
-#endif
-                            *dstPtr = *((T*)((byte*)(srcPtr) + offset));
-                            ++dstPtr;
-                        }
-                    }
-                }
-            }
-            return retAry;
-        }
-
-
-#region Size Offset of Entity Filed
-        private NativeArray<T> _GetAllBoidSpawner_Transform3D<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Transform() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidSpawner_Transform3D<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Transform()+ compFiledOffset);}
-        private NativeArray<Transform3D> _GetAllBoidSpawner_Transform(){return GetAllEntityFiledAry<Transform3D,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Transform());} 
+#region Size Offset of Entity Field
+        private NativeArray<T> _GetAllBoidSpawner_Transform3D<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Transform() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidSpawner_Transform3D<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Transform()+ compFieldOffset);}
+        private NativeArray<Transform3D> _GetAllBoidSpawner_Transform(){return _GetAllEntityField<Transform3D,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Transform());} 
         private int _GetOffsetOfBoidSpawner_Transform(){ var tempObj =  new BoidSpawner(); BoidSpawner* ptr = &tempObj;var filedPtr = &(ptr->Transform);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidSpawner_Prefab<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Prefab() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidSpawner_Prefab<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Prefab()+ compFiledOffset);}
-        private NativeArray<Prefab> _GetAllBoidSpawner_Prefab(){return GetAllEntityFiledAry<Prefab,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Prefab());} 
+        private NativeArray<T> _GetAllBoidSpawner_Prefab<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Prefab() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidSpawner_Prefab<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Prefab()+ compFieldOffset);}
+        private NativeArray<Prefab> _GetAllBoidSpawner_Prefab(){return _GetAllEntityField<Prefab,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Prefab());} 
         private int _GetOffsetOfBoidSpawner_Prefab(){ var tempObj =  new BoidSpawner(); BoidSpawner* ptr = &tempObj;var filedPtr = &(ptr->Prefab);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidSpawner_SpawnData<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Spawn() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidSpawner_SpawnData<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Spawn()+ compFiledOffset);}
-        private NativeArray<SpawnData> _GetAllBoidSpawner_Spawn(){return GetAllEntityFiledAry<SpawnData,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Spawn());} 
+        private NativeArray<T> _GetAllBoidSpawner_SpawnData<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Spawn() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidSpawner_SpawnData<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Spawn()+ compFieldOffset);}
+        private NativeArray<SpawnData> _GetAllBoidSpawner_Spawn(){return _GetAllEntityField<SpawnData,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Spawn());} 
         private int _GetOffsetOfBoidSpawner_Spawn(){ var tempObj =  new BoidSpawner(); BoidSpawner* ptr = &tempObj;var filedPtr = &(ptr->Spawn);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidSpawner_AssetData<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_BoidPrefab() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidSpawner_AssetData<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_BoidPrefab()+ compFiledOffset);}
-        private NativeArray<AssetData> _GetAllBoidSpawner_BoidPrefab(){return GetAllEntityFiledAry<AssetData,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_BoidPrefab());} 
+        private NativeArray<T> _GetAllBoidSpawner_AssetData<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_BoidPrefab() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidSpawner_AssetData<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_BoidPrefab()+ compFieldOffset);}
+        private NativeArray<AssetData> _GetAllBoidSpawner_BoidPrefab(){return _GetAllEntityField<AssetData,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_BoidPrefab());} 
         private int _GetOffsetOfBoidSpawner_BoidPrefab(){ var tempObj =  new BoidSpawner(); BoidSpawner* ptr = &tempObj;var filedPtr = &(ptr->BoidPrefab);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidSpawner_BoidSpawnerTag<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Tag() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidSpawner_BoidSpawnerTag<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Tag()+ compFiledOffset);}
-        private NativeArray<BoidSpawnerTag> _GetAllBoidSpawner_Tag(){return GetAllEntityFiledAry<BoidSpawnerTag,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Tag());} 
+        private NativeArray<T> _GetAllBoidSpawner_BoidSpawnerTag<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Tag() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidSpawner_BoidSpawnerTag<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Tag()+ compFieldOffset);}
+        private NativeArray<BoidSpawnerTag> _GetAllBoidSpawner_Tag(){return _GetAllEntityField<BoidSpawnerTag,BoidSpawner>(_BoidSpawnerAry,_GetOffsetOfBoidSpawner_Tag());} 
         private int _GetOffsetOfBoidSpawner_Tag(){ var tempObj =  new BoidSpawner(); BoidSpawner* ptr = &tempObj;var filedPtr = &(ptr->Tag);  return (int)((long) filedPtr - (long) ptr);        } 
-        private NativeArray<T> _GetAllBoidCell_CellData<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidCell>(_BoidCellAry,_GetOffsetOfBoidCell_Cell() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidCell_CellData<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidCell>(_BoidCellAry,_GetOffsetOfBoidCell_Cell()+ compFiledOffset);}
-        private NativeArray<CellData> _GetAllBoidCell_Cell(){return GetAllEntityFiledAry<CellData,BoidCell>(_BoidCellAry,_GetOffsetOfBoidCell_Cell());} 
+        private NativeArray<T> _GetAllBoidCell_CellData<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidCell>(_BoidCellAry,_GetOffsetOfBoidCell_Cell() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidCell_CellData<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidCell>(_BoidCellAry,_GetOffsetOfBoidCell_Cell()+ compFieldOffset);}
+        private NativeArray<CellData> _GetAllBoidCell_Cell(){return _GetAllEntityField<CellData,BoidCell>(_BoidCellAry,_GetOffsetOfBoidCell_Cell());} 
         private int _GetOffsetOfBoidCell_Cell(){ var tempObj =  new BoidCell(); BoidCell* ptr = &tempObj;var filedPtr = &(ptr->Cell);  return (int)((long) filedPtr - (long) ptr);        } 
-        private NativeArray<T> _GetAllBoid_Transform3D<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_Transform() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoid_Transform3D<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_Transform()+ compFiledOffset);}
-        private NativeArray<Transform3D> _GetAllBoid_Transform(){return GetAllEntityFiledAry<Transform3D,Boid>(_BoidAry,_GetOffsetOfBoid_Transform());} 
+        private NativeArray<T> _GetAllBoid_Transform3D<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_Transform() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoid_Transform3D<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_Transform()+ compFieldOffset);}
+        private NativeArray<Transform3D> _GetAllBoid_Transform(){return _GetAllEntityField<Transform3D,Boid>(_BoidAry,_GetOffsetOfBoid_Transform());} 
         private int _GetOffsetOfBoid_Transform(){ var tempObj =  new Boid(); Boid* ptr = &tempObj;var filedPtr = &(ptr->Transform);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoid_Prefab<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_Prefab() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoid_Prefab<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_Prefab()+ compFiledOffset);}
-        private NativeArray<Prefab> _GetAllBoid_Prefab(){return GetAllEntityFiledAry<Prefab,Boid>(_BoidAry,_GetOffsetOfBoid_Prefab());} 
+        private NativeArray<T> _GetAllBoid_Prefab<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_Prefab() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoid_Prefab<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_Prefab()+ compFieldOffset);}
+        private NativeArray<Prefab> _GetAllBoid_Prefab(){return _GetAllEntityField<Prefab,Boid>(_BoidAry,_GetOffsetOfBoid_Prefab());} 
         private int _GetOffsetOfBoid_Prefab(){ var tempObj =  new Boid(); Boid* ptr = &tempObj;var filedPtr = &(ptr->Prefab);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoid_BoidState<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_State() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoid_BoidState<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_State()+ compFiledOffset);}
-        private NativeArray<BoidState> _GetAllBoid_State(){return GetAllEntityFiledAry<BoidState,Boid>(_BoidAry,_GetOffsetOfBoid_State());} 
+        private NativeArray<T> _GetAllBoid_BoidState<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_State() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoid_BoidState<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_State()+ compFieldOffset);}
+        private NativeArray<BoidState> _GetAllBoid_State(){return _GetAllEntityField<BoidState,Boid>(_BoidAry,_GetOffsetOfBoid_State());} 
         private int _GetOffsetOfBoid_State(){ var tempObj =  new Boid(); Boid* ptr = &tempObj;var filedPtr = &(ptr->State);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoid_BoidTag<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_Tag() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoid_BoidTag<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,Boid>(_BoidAry,_GetOffsetOfBoid_Tag()+ compFiledOffset);}
-        private NativeArray<BoidTag> _GetAllBoid_Tag(){return GetAllEntityFiledAry<BoidTag,Boid>(_BoidAry,_GetOffsetOfBoid_Tag());} 
+        private NativeArray<T> _GetAllBoid_BoidTag<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_Tag() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoid_BoidTag<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,Boid>(_BoidAry,_GetOffsetOfBoid_Tag()+ compFieldOffset);}
+        private NativeArray<BoidTag> _GetAllBoid_Tag(){return _GetAllEntityField<BoidTag,Boid>(_BoidAry,_GetOffsetOfBoid_Tag());} 
         private int _GetOffsetOfBoid_Tag(){ var tempObj =  new Boid(); Boid* ptr = &tempObj;var filedPtr = &(ptr->Tag);  return (int)((long) filedPtr - (long) ptr);        } 
-        private NativeArray<T> _GetAllBoidTarget_Transform3D<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Transform() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidTarget_Transform3D<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Transform()+ compFiledOffset);}
-        private NativeArray<Transform3D> _GetAllBoidTarget_Transform(){return GetAllEntityFiledAry<Transform3D,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Transform());} 
+        private NativeArray<T> _GetAllBoidTarget_Transform3D<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Transform() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidTarget_Transform3D<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Transform()+ compFieldOffset);}
+        private NativeArray<Transform3D> _GetAllBoidTarget_Transform(){return _GetAllEntityField<Transform3D,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Transform());} 
         private int _GetOffsetOfBoidTarget_Transform(){ var tempObj =  new BoidTarget(); BoidTarget* ptr = &tempObj;var filedPtr = &(ptr->Transform);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidTarget_Prefab<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Prefab() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidTarget_Prefab<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Prefab()+ compFiledOffset);}
-        private NativeArray<Prefab> _GetAllBoidTarget_Prefab(){return GetAllEntityFiledAry<Prefab,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Prefab());} 
+        private NativeArray<T> _GetAllBoidTarget_Prefab<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Prefab() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidTarget_Prefab<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Prefab()+ compFieldOffset);}
+        private NativeArray<Prefab> _GetAllBoidTarget_Prefab(){return _GetAllEntityField<Prefab,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Prefab());} 
         private int _GetOffsetOfBoidTarget_Prefab(){ var tempObj =  new BoidTarget(); BoidTarget* ptr = &tempObj;var filedPtr = &(ptr->Prefab);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidTarget_TargetMoveInfo<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_MoveInfo() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidTarget_TargetMoveInfo<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_MoveInfo()+ compFiledOffset);}
-        private NativeArray<TargetMoveInfo> _GetAllBoidTarget_MoveInfo(){return GetAllEntityFiledAry<TargetMoveInfo,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_MoveInfo());} 
+        private NativeArray<T> _GetAllBoidTarget_TargetMoveInfo<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_MoveInfo() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidTarget_TargetMoveInfo<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_MoveInfo()+ compFieldOffset);}
+        private NativeArray<TargetMoveInfo> _GetAllBoidTarget_MoveInfo(){return _GetAllEntityField<TargetMoveInfo,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_MoveInfo());} 
         private int _GetOffsetOfBoidTarget_MoveInfo(){ var tempObj =  new BoidTarget(); BoidTarget* ptr = &tempObj;var filedPtr = &(ptr->MoveInfo);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidTarget_BoidTargetTag<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Tag() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidTarget_BoidTargetTag<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Tag()+ compFiledOffset);}
-        private NativeArray<BoidTargetTag> _GetAllBoidTarget_Tag(){return GetAllEntityFiledAry<BoidTargetTag,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Tag());} 
+        private NativeArray<T> _GetAllBoidTarget_BoidTargetTag<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Tag() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidTarget_BoidTargetTag<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Tag()+ compFieldOffset);}
+        private NativeArray<BoidTargetTag> _GetAllBoidTarget_Tag(){return _GetAllEntityField<BoidTargetTag,BoidTarget>(_BoidTargetAry,_GetOffsetOfBoidTarget_Tag());} 
         private int _GetOffsetOfBoidTarget_Tag(){ var tempObj =  new BoidTarget(); BoidTarget* ptr = &tempObj;var filedPtr = &(ptr->Tag);  return (int)((long) filedPtr - (long) ptr);        } 
-        private NativeArray<T> _GetAllBoidObstacle_Transform3D<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Transform() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidObstacle_Transform3D<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Transform()+ compFiledOffset);}
-        private NativeArray<Transform3D> _GetAllBoidObstacle_Transform(){return GetAllEntityFiledAry<Transform3D,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Transform());} 
+        private NativeArray<T> _GetAllBoidObstacle_Transform3D<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Transform() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidObstacle_Transform3D<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Transform()+ compFieldOffset);}
+        private NativeArray<Transform3D> _GetAllBoidObstacle_Transform(){return _GetAllEntityField<Transform3D,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Transform());} 
         private int _GetOffsetOfBoidObstacle_Transform(){ var tempObj =  new BoidObstacle(); BoidObstacle* ptr = &tempObj;var filedPtr = &(ptr->Transform);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidObstacle_Prefab<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Prefab() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidObstacle_Prefab<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Prefab()+ compFiledOffset);}
-        private NativeArray<Prefab> _GetAllBoidObstacle_Prefab(){return GetAllEntityFiledAry<Prefab,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Prefab());} 
+        private NativeArray<T> _GetAllBoidObstacle_Prefab<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Prefab() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidObstacle_Prefab<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Prefab()+ compFieldOffset);}
+        private NativeArray<Prefab> _GetAllBoidObstacle_Prefab(){return _GetAllEntityField<Prefab,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Prefab());} 
         private int _GetOffsetOfBoidObstacle_Prefab(){ var tempObj =  new BoidObstacle(); BoidObstacle* ptr = &tempObj;var filedPtr = &(ptr->Prefab);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidObstacle_PlayerData<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Player() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidObstacle_PlayerData<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Player()+ compFiledOffset);}
-        private NativeArray<PlayerData> _GetAllBoidObstacle_Player(){return GetAllEntityFiledAry<PlayerData,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Player());} 
+        private NativeArray<T> _GetAllBoidObstacle_PlayerData<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Player() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidObstacle_PlayerData<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Player()+ compFieldOffset);}
+        private NativeArray<PlayerData> _GetAllBoidObstacle_Player(){return _GetAllEntityField<PlayerData,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Player());} 
         private int _GetOffsetOfBoidObstacle_Player(){ var tempObj =  new BoidObstacle(); BoidObstacle* ptr = &tempObj;var filedPtr = &(ptr->Player);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidObstacle_SkillData<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Skill() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidObstacle_SkillData<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Skill()+ compFiledOffset);}
-        private NativeArray<SkillData> _GetAllBoidObstacle_Skill(){return GetAllEntityFiledAry<SkillData,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Skill());} 
+        private NativeArray<T> _GetAllBoidObstacle_SkillData<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Skill() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidObstacle_SkillData<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Skill()+ compFieldOffset);}
+        private NativeArray<SkillData> _GetAllBoidObstacle_Skill(){return _GetAllEntityField<SkillData,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Skill());} 
         private int _GetOffsetOfBoidObstacle_Skill(){ var tempObj =  new BoidObstacle(); BoidObstacle* ptr = &tempObj;var filedPtr = &(ptr->Skill);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidObstacle_MoveData<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Move() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidObstacle_MoveData<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Move()+ compFiledOffset);}
-        private NativeArray<MoveData> _GetAllBoidObstacle_Move(){return GetAllEntityFiledAry<MoveData,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Move());} 
+        private NativeArray<T> _GetAllBoidObstacle_MoveData<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Move() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidObstacle_MoveData<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Move()+ compFieldOffset);}
+        private NativeArray<MoveData> _GetAllBoidObstacle_Move(){return _GetAllEntityField<MoveData,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Move());} 
         private int _GetOffsetOfBoidObstacle_Move(){ var tempObj =  new BoidObstacle(); BoidObstacle* ptr = &tempObj;var filedPtr = &(ptr->Move);  return (int)((long) filedPtr - (long) ptr);        }
-        private NativeArray<T> _GetAllBoidObstacle_BoidObstacleTag<T>(int compFiledOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Tag() + compFiledOffset,filterFunc,out length);}
-        private NativeArray<T> _GetAllBoidObstacle_BoidObstacleTag<T>(int compFiledOffset) where T: unmanaged{return GetAllEntityFiledAry<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Tag()+ compFiledOffset);}
-        private NativeArray<BoidObstacleTag> _GetAllBoidObstacle_Tag(){return GetAllEntityFiledAry<BoidObstacleTag,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Tag());} 
+        private NativeArray<T> _GetAllBoidObstacle_BoidObstacleTag<T>(int compFieldOffset,FuncEntityFilter<Entity> filterFunc,out int length) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Tag() + compFieldOffset,filterFunc,out length);}
+        private NativeArray<T> _GetAllBoidObstacle_BoidObstacleTag<T>(int compFieldOffset) where T: unmanaged{return _GetAllEntityField<T,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Tag()+ compFieldOffset);}
+        private NativeArray<BoidObstacleTag> _GetAllBoidObstacle_Tag(){return _GetAllEntityField<BoidObstacleTag,BoidObstacle>(_BoidObstacleAry,_GetOffsetOfBoidObstacle_Tag());} 
         private int _GetOffsetOfBoidObstacle_Tag(){ var tempObj =  new BoidObstacle(); BoidObstacle* ptr = &tempObj;var filedPtr = &(ptr->Tag);  return (int)((long) filedPtr - (long) ptr);        }        
 
         private int _GetOffsetOfAnimator_Pad(){var tempObj =  new Animator(); Animator* ptr = &tempObj; var filedPtr = &(ptr->Pad);return (int)((long) filedPtr - (long) ptr);        }

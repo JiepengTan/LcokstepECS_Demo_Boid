@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using Lockstep.Logging;                                                                          
 using Lockstep.Util;                                                                          
 namespace Lockstep.UnsafeECS.Game {  
-    public unsafe partial class __entities {
+    public unsafe partial class _EntityManager {
         internal NativeEntityArray<BoidSpawner> _BoidSpawnerAry;
         internal NativeEntityArray<BoidCell> _BoidCellAry;
         internal NativeEntityArray<Boid> _BoidAry;
@@ -44,12 +44,12 @@ namespace Lockstep.UnsafeECS.Game {
             _BoidTargetAry.Free();
             _BoidObstacleAry.Free(); 
         }
-        internal __entities Clone(){
-            var ret = new __entities();
+        internal _EntityManager Clone(){
+            var ret = new _EntityManager();
             CopyTo(ret);
             return ret;
         }
-        internal void CopyTo(__entities dst){
+        internal void CopyTo(_EntityManager dst){
             _BoidSpawnerAry.CopyTo(ref dst._BoidSpawnerAry);
             _BoidCellAry.CopyTo(ref dst._BoidCellAry);
             _BoidAry.CopyTo(ref dst._BoidAry);
@@ -68,7 +68,7 @@ namespace Lockstep.UnsafeECS.Game {
                 var len = _BoidSpawnerAry._WaitCreateCount;
                 var ptr = _BoidSpawnerAry._WaitCreateAry.GetPointer(0);
                 for(int i =0;i < len; ++i,++ptr){
-                    *ptr = __default.BoidSpawner;
+                    *ptr = _DefaultDefine.BoidSpawner;
                     ptr->_entity._ref._type = (int)EEntityType.BoidSpawner;
                 }
                 _BoidSpawnerAry._WaitCreateCount = 0;
@@ -85,7 +85,7 @@ namespace Lockstep.UnsafeECS.Game {
                 var len = _BoidCellAry._WaitCreateCount;
                 var ptr = _BoidCellAry._WaitCreateAry.GetPointer(0);
                 for(int i =0;i < len; ++i,++ptr){
-                    *ptr = __default.BoidCell;
+                    *ptr = _DefaultDefine.BoidCell;
                     ptr->_entity._ref._type = (int)EEntityType.BoidCell;
                 }
                 _BoidCellAry._WaitCreateCount = 0;
@@ -102,7 +102,7 @@ namespace Lockstep.UnsafeECS.Game {
                 var len = _BoidAry._WaitCreateCount;
                 var ptr = _BoidAry._WaitCreateAry.GetPointer(0);
                 for(int i =0;i < len; ++i,++ptr){
-                    *ptr = __default.Boid;
+                    *ptr = _DefaultDefine.Boid;
                     ptr->_entity._ref._type = (int)EEntityType.Boid;
                 }
                 _BoidAry._WaitCreateCount = 0;
@@ -119,7 +119,7 @@ namespace Lockstep.UnsafeECS.Game {
                 var len = _BoidTargetAry._WaitCreateCount;
                 var ptr = _BoidTargetAry._WaitCreateAry.GetPointer(0);
                 for(int i =0;i < len; ++i,++ptr){
-                    *ptr = __default.BoidTarget;
+                    *ptr = _DefaultDefine.BoidTarget;
                     ptr->_entity._ref._type = (int)EEntityType.BoidTarget;
                 }
                 _BoidTargetAry._WaitCreateCount = 0;
@@ -136,7 +136,7 @@ namespace Lockstep.UnsafeECS.Game {
                 var len = _BoidObstacleAry._WaitCreateCount;
                 var ptr = _BoidObstacleAry._WaitCreateAry.GetPointer(0);
                 for(int i =0;i < len; ++i,++ptr){
-                    *ptr = __default.BoidObstacle;
+                    *ptr = _DefaultDefine.BoidObstacle;
                     ptr->_entity._ref._type = (int)EEntityType.BoidObstacle;
                 }
                 _BoidObstacleAry._WaitCreateCount = 0;

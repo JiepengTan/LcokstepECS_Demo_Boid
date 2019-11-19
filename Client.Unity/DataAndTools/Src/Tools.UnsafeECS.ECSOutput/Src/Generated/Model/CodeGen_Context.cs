@@ -45,7 +45,7 @@ namespace Lockstep.UnsafeECS.Game {
         public bool HasInit = false;
         public TempFields TempFields{ get;private set;}
 
-        public __entities _entities = new __entities();
+        public _EntityManager _entities = new _EntityManager();
         public IEntityService _entityService;
         private IServiceContainer _services;
         public T GetService<T>() where T : Lockstep.Game.IService{
@@ -55,7 +55,7 @@ namespace Lockstep.UnsafeECS.Game {
 
 
     #region Rollback Implement
-        private ClassBackupHelper<__entities> _entitiesBackuper = new ClassBackupHelper<__entities>();
+        private ClassBackupHelper<_EntityManager> _entitiesBackuper = new ClassBackupHelper<_EntityManager>();
 
         protected override void _DoBackup(int tick){
             _entitiesBackuper.Backup(tick, _entities.Clone());
@@ -182,7 +182,7 @@ namespace Lockstep.UnsafeECS.Game {
         }
 
         private void ResetEntityBoidSpawner(BoidSpawner* dstPtr){
-            *dstPtr = __default.BoidSpawner;
+            *dstPtr = _DefaultDefine.BoidSpawner;
         }
         public Boolean BoidSpawnerExists(EntityRef entityRef){
             return GetBoidSpawner(entityRef) != null;
@@ -197,7 +197,7 @@ namespace Lockstep.UnsafeECS.Game {
             _entityService.OnBoidSpawnerDestroy(this, ptr);
             _entityService.OnEntityDestroy(this, &ptr->_entity);
             var copy = ptr->_entity;
-            *ptr = __default.BoidSpawner;
+            *ptr = _DefaultDefine.BoidSpawner;
             ptr->_entity = copy;
             _EntityDestroy(&ptr->_entity);
         }
@@ -226,7 +226,7 @@ namespace Lockstep.UnsafeECS.Game {
         }
 
         private void ResetEntityBoidCell(BoidCell* dstPtr){
-            *dstPtr = __default.BoidCell;
+            *dstPtr = _DefaultDefine.BoidCell;
         }
         public Boolean BoidCellExists(EntityRef entityRef){
             return GetBoidCell(entityRef) != null;
@@ -241,7 +241,7 @@ namespace Lockstep.UnsafeECS.Game {
             _entityService.OnBoidCellDestroy(this, ptr);
             _entityService.OnEntityDestroy(this, &ptr->_entity);
             var copy = ptr->_entity;
-            *ptr = __default.BoidCell;
+            *ptr = _DefaultDefine.BoidCell;
             ptr->_entity = copy;
             _EntityDestroy(&ptr->_entity);
         }
@@ -270,7 +270,7 @@ namespace Lockstep.UnsafeECS.Game {
         }
 
         private void ResetEntityBoid(Boid* dstPtr){
-            *dstPtr = __default.Boid;
+            *dstPtr = _DefaultDefine.Boid;
         }
         public Boolean BoidExists(EntityRef entityRef){
             return GetBoid(entityRef) != null;
@@ -285,7 +285,7 @@ namespace Lockstep.UnsafeECS.Game {
             _entityService.OnBoidDestroy(this, ptr);
             _entityService.OnEntityDestroy(this, &ptr->_entity);
             var copy = ptr->_entity;
-            *ptr = __default.Boid;
+            *ptr = _DefaultDefine.Boid;
             ptr->_entity = copy;
             _EntityDestroy(&ptr->_entity);
         }
@@ -314,7 +314,7 @@ namespace Lockstep.UnsafeECS.Game {
         }
 
         private void ResetEntityBoidTarget(BoidTarget* dstPtr){
-            *dstPtr = __default.BoidTarget;
+            *dstPtr = _DefaultDefine.BoidTarget;
         }
         public Boolean BoidTargetExists(EntityRef entityRef){
             return GetBoidTarget(entityRef) != null;
@@ -329,7 +329,7 @@ namespace Lockstep.UnsafeECS.Game {
             _entityService.OnBoidTargetDestroy(this, ptr);
             _entityService.OnEntityDestroy(this, &ptr->_entity);
             var copy = ptr->_entity;
-            *ptr = __default.BoidTarget;
+            *ptr = _DefaultDefine.BoidTarget;
             ptr->_entity = copy;
             _EntityDestroy(&ptr->_entity);
         }
@@ -358,7 +358,7 @@ namespace Lockstep.UnsafeECS.Game {
         }
 
         private void ResetEntityBoidObstacle(BoidObstacle* dstPtr){
-            *dstPtr = __default.BoidObstacle;
+            *dstPtr = _DefaultDefine.BoidObstacle;
         }
         public Boolean BoidObstacleExists(EntityRef entityRef){
             return GetBoidObstacle(entityRef) != null;
@@ -373,7 +373,7 @@ namespace Lockstep.UnsafeECS.Game {
             _entityService.OnBoidObstacleDestroy(this, ptr);
             _entityService.OnEntityDestroy(this, &ptr->_entity);
             var copy = ptr->_entity;
-            *ptr = __default.BoidObstacle;
+            *ptr = _DefaultDefine.BoidObstacle;
             ptr->_entity = copy;
             _EntityDestroy(&ptr->_entity);
         }

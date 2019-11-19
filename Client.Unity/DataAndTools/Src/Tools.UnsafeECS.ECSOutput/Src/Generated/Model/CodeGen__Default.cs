@@ -24,7 +24,7 @@ using System.Collections.Generic;
 using Lockstep.Logging;                                                                          
 using Lockstep.Util;                                                                          
 namespace Lockstep.UnsafeECS.Game {  
-    public unsafe partial struct __default {
+    public unsafe partial struct _DefaultDefine {
         //enum 
         public static EEntityType EEntityType;
         public static ECampType ECampType;
