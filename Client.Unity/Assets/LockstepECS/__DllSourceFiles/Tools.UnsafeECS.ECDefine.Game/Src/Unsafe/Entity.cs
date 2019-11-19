@@ -16,7 +16,7 @@ namespace Lockstep.UnsafeECSDefine {
     public partial class BoidCell : IEntity{
         public CellData Cell;
     }
-
+  
     [EntityCount(2000)]
     public partial class Boid: IEntity,IUpdateViewEntity{
         public Transform3D Transform;
@@ -24,7 +24,7 @@ namespace Lockstep.UnsafeECSDefine {
         public BoidState State;
         public BoidTag Tag;
     }
-    
+
     [EntityCount(2)]
     public partial class BoidTarget: IEntity,IBindViewEntity {
         public Transform3D Transform;
